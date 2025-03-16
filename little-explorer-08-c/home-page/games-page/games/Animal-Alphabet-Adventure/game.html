@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animal Alphabet Adventure</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive;
+            background: #88d498;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .game-container {
+            background: #fff;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.2);
+            max-width: 600px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #2a5a3e;
+            text-align: center;
+            margin: 0 0 20px;
+        }
+
+        .difficulty-selector {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        select {
+            font-size: 18px;
+            padding: 5px;
+            border-radius: 10px;
+        }
+
+        .score {
+            font-size: 24px;
+            color: #2a5a3e;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .animal-display {
+            font-size: 100px;
+            text-align: center;
+            margin: 20px 0;
+            animation: bounce 1s infinite;
+        }
+
+        .letters-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .letter-btn {
+            font-size: 30px;
+            padding: 20px;
+            border: none;
+            border-radius: 15px;
+            background: #ffd700;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .letter-btn:hover {
+            transform: scale(1.1);
+            background: #ffdf40;
+        }
+
+        .letter-btn.correct {
+            animation: correct 1s;
+        }
+
+        .letter-btn.wrong {
+            animation: wrong 1s;
+        }
+
+        .fact-display {
+            font-size: 18px;
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            background: #e8f5e9;
+            border-radius: 10px;
+            min-height: 60px;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes correct {
+            0% { background: #a5d6a7; }
+            100% { background: #ffd700; }
+        }
+
+        @keyframes wrong {
+            0% { background: #ef9a9a; }
+            100% { background: #ffd700; }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>Animal Alphabet Adventure</h1>
+        <div class="difficulty-selector">
+            <select id="difficulty">
+                <option value="easy">Easy</option>
+                <option value="medium">Medium</option>
+                <option value="hard">Hard</option>
+            </select>
+        </div>
+        <div class="score">Score: <span id="score">0</span></div>
+        <div class="animal-display" id="animal"></div>
+        <div class="letters-container" id="letters"></div>
+        <div class="fact-display" id="fact"></div>
+    </div>
+
+    <script>
+        const animals = [
+            { name: 'Zebra', letter: 'Z', emoji: '🦓', fact: 'Zebras have unique stripe patterns like human fingerprints!' },
+            { name: 'Alligator', letter: 'A', emoji: '🐊', fact: 'Alligators can grow up to 15 feet long!' },
+            { name: 'Elephant', letter: 'E', emoji: '🐘', fact: 'Elephants can recognize themselves in mirrors!' },
+            { name: 'Giraffe', letter: 'G', emoji: '🦒', fact: 'Giraffe tongues can be 20 inches long!' },
+            { name: 'Kangaroo', letter: 'K', emoji: '🦘', fact: 'Baby kangaroos are called joeys!' },
+            { name: 'Penguin', letter: 'P', emoji: '🐧', fact: 'Penguins propose with pebbles!' },
+            { name: 'Tiger', letter: 'T', emoji: '🐅', fact: 'Tiger stripes are on their skin too!' }
+        ];
+
+        let currentAnimalIndex = 0;
+        let score = 0;
+        const scoreElement = document.getElementById('score');
+        const animalElement = document.getElementById('animal');
+        const lettersElement = document.getElementById('letters');
+        const factElement = document.getElementById('fact');
+        const difficultySelect = document.getElementById('difficulty');
+
+        function getRandomLetters(correctLetter, count) {
+            const caseType = difficultySelect.value === 'hard' ? 'lower' : 'upper';
+            const correct = caseType === 'lower' 
+                ? correctLetter.toLowerCase() 
+                : correctLetter.toUpperCase();
+            
+            const letters = new Set();
+            while (letters.size < count - 1) {
+                const randomCharCode = Math.floor(Math.random() * 26) + 
+                    (caseType === 'lower' ? 97 : 65);
+                const letter = String.fromCharCode(randomCharCode);
+                if (letter !== correct) letters.add(letter);
+            }
+            
+            const lettersArray = Array.from(letters);
+            lettersArray.push(correct);
+            return lettersArray.sort(() => Math.random() - 0.5);
+        }
+
+        function newQuestion() {
+            const animal = animals[currentAnimalIndex];
+            animalElement.textContent = animal.emoji;
+            factElement.textContent = '';
+
+            const difficulty = difficultySelect.value;
+            const letterCount = difficulty === 'easy' ? 3 : 5;
+            const letters = getRandomLetters(animal.letter, letterCount);
+
+            lettersElement.innerHTML = letters.map(letter => `
+                <button class="letter-btn" data-letter="${letter}">${letter}</button>
+            `).join('');
+
+            document.querySelectorAll('.letter-btn').forEach(btn => {
+                btn.addEventListener('click', handleGuess);
+            });
+        }
+
+        function handleGuess(e) {
+            const guessedLetter = e.target.dataset.letter;
+            const correctLetter = animals[currentAnimalIndex].letter.toUpperCase();
+            const isCorrect = guessedLetter.toUpperCase() === correctLetter;
+
+            e.target.classList.add(isCorrect ? 'correct' : 'wrong');
+            playSound(isCorrect ? 784 : 220);
+
+            if (isCorrect) {
+                score++;
+                scoreElement.textContent = score;
+                factElement.textContent = animals[currentAnimalIndex].fact;
+                
+                setTimeout(() => {
+                    currentAnimalIndex = (currentAnimalIndex + 1) % animals.length;
+                    newQuestion();
+                }, 2000);
+            } else {
+                setTimeout(() => {
+                    e.target.classList.remove('wrong');
+                }, 1000);
+            }
+        }
+
+        function playSound(frequency) {
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                oscillator.type = 'triangle';
+                oscillator.frequency.value = frequency;
+                gainNode.gain.value = 0.1;
+                oscillator.start();
+                setTimeout(() => oscillator.stop(), 200);
+            } catch (e) {
+                // Sound not supported
+            }
+        }
+
+        difficultySelect.addEventListener('change', newQuestion);
+        newQuestion();
+    </script>
+</body>
+</html>

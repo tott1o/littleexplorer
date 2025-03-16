@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nature Sorter</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive;
+            background: #f0f7e6;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .game-container {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #4a7c59;
+            text-align: center;
+            margin: 0 0 20px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px #d8f3dc;
+        }
+
+        .activity-section {
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8fff5;
+            border-radius: 15px;
+            border: 3px solid #d8f3dc;
+        }
+
+        .sorting-area {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .sort-group {
+            background: #e4f5da;
+            border-radius: 15px;
+            padding: 20px;
+            min-height: 150px;
+            border: 3px dashed #4a7c59;
+            transition: transform 0.2s;
+        }
+
+        .sort-group:hover {
+            transform: scale(1.02);
+        }
+
+        .sort-title {
+            color: #4a7c59;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .draggable-item {
+            width: 80px;
+            height: 80px;
+            background: #fff;
+            border: 3px solid #4a7c59;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            cursor: move;
+            margin: 10px;
+            transition: all 0.2s;
+        }
+
+        .draggable-item:hover {
+            background: #d8f3dc;
+            transform: scale(1.1);
+        }
+
+        .score-board {
+            font-size: 24px;
+            color: #4a7c59;
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            background: #e4f5da;
+            border-radius: 15px;
+        }
+
+        .nature-fact {
+            background: #d8f3dc;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: center;
+            font-size: 1.1em;
+            border: 2px dashed #4a7c59;
+        }
+
+        .season-icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+            animation: float 3s infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes celebrate {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .correct {
+            background: #c7f9cc !important;
+            border-color: #38a3a5 !important;
+            animation: celebrate 0.5s;
+        }
+
+        .wrong {
+            border-color: #ff6b6b !important;
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>Nature Sorter 🌸🍂🔍</h1>
+        <div class="score-board">Score: <span id="score">0</span></div>
+
+        <div class="activity-section">
+            <h2>🌼 Seasonal Sorting 🌨️</h2>
+            <div class="sorting-area" id="seasonContainer">
+                <div class="sort-group" data-season="spring">
+                    <div class="season-icon">🌼</div>
+                    <div class="sort-title">Spring Items</div>
+                </div>
+                <div class="sort-group" data-season="summer">
+                    <div class="season-icon">🌞</div>
+                    <div class="sort-title">Summer Items</div>
+                </div>
+                <div class="sort-group" data-season="autumn">
+                    <div class="season-icon">🍂</div>
+                    <div class="sort-title">Autumn Items</div>
+                </div>
+                <div class="sort-group" data-season="winter">
+                    <div class="season-icon">⛄</div>
+                    <div class="sort-title">Winter Items</div>
+                </div>
+            </div>
+            <div class="sorting-area" id="seasonItems"></div>
+        </div>
+
+        <div class="activity-section">
+            <h2>🔍 Attribute Sorting</h2>
+            <div class="sorting-area" id="attributeContainer"></div>
+            <div class="sorting-area" id="attributeItems"></div>
+        </div>
+
+        <div class="nature-fact" id="factDisplay">
+            Did you know? Leaves change color because of chlorophyll!
+        </div>
+    </div>
+
+    <script>
+        const natureData = {
+            seasonalItems: [
+                { item: '🌸', seasons: ['spring'], fact: "Cherry blossoms signal spring's arrival!" },
+                { item: '🌻', seasons: ['summer'], fact: "Sunflowers track the sun's movement!" },
+                { item: '🍁', seasons: ['autumn'], fact: "Maple leaves change color in fall!" },
+                { item: '⛄', seasons: ['winter'], fact: "Snowmen need temperatures below freezing!" },
+                { item: '🐣', seasons: ['spring'], fact: "Baby birds hatch in spring!" },
+                { item: '🏖️', seasons: ['summer'], fact: "Beaches are popular in summer!" },
+                { item: '🎃', seasons: ['autumn'], fact: "Pumpkins ripen in autumn!" },
+                { item: '🎿', seasons: ['winter'], fact: "Skiing is a winter sport!" },
+                { item: '🌧️', seasons: ['spring', 'autumn'], fact: "April showers bring May flowers!" },
+                { item: '🍉', seasons: ['summer'], fact: "Watermelon is a summer fruit!" }
+            ],
+            attributeItems: [
+                { item: '🍃', type: 'leaf', color: 'green', size: 'small' },
+                { item: '🌸', type: 'flower', color: 'pink', size: 'medium' },
+                { item: '🎍', type: 'pinecone', color: 'brown', size: 'medium' },
+                { item: '🪨', type: 'rock', color: 'gray', size: 'medium' },
+                { item: '🐌', type: 'snail', color: 'brown', size: 'small' },
+                { item: '🍄', type: 'mushroom', color: 'red', size: 'medium' },
+                { item: '🌰', type: 'acorn', color: 'brown', size: 'small' },
+                { item: '🪶', type: 'feather', color: 'white', size: 'medium' }
+            ]
+        };
+
+        let score = 0;
+        let currentAttribute = 'type';
+
+        function initializeGame() {
+            setupSeasonalSorting();
+            setupAttributeSorting();
+            updateScoreDisplay();
+        }
+
+        function setupSeasonalSorting() {
+            const container = document.getElementById('seasonItems');
+            const items = [...natureData.seasonalItems].sort(() => Math.random() - 0.5);
+            
+            container.innerHTML = items.map(item => `
+                <div class="draggable-item" 
+                     data-seasons="${item.seasons.join(',')}"
+                     data-fact="${item.fact}"
+                     draggable="true">
+                    ${item.item}
+                </div>
+            `).join('');
+
+            setupDragAndDrop('season');
+        }
+
+        function setupAttributeSorting() {
+            currentAttribute = ['type', 'color', 'size'][Math.floor(Math.random() * 3)];
+            const groups = [...new Set(natureData.attributeItems.map(item => item[currentAttribute]))];
+            
+            const container = document.getElementById('attributeContainer');
+            container.innerHTML = groups.map(group => `
+                <div class="sort-group" data-category="${group}">
+                    <div class="sort-title">Sort by ${currentAttribute}: ${group}</div>
+                </div>
+            `).join('');
+
+            const itemsContainer = document.getElementById('attributeItems');
+            const items = [...natureData.attributeItems].sort(() => Math.random() - 0.5);
+            itemsContainer.innerHTML = items.map(item => `
+                <div class="draggable-item" 
+                     data-type="${item.type}"
+                     data-color="${item.color}"
+                     data-size="${item.size}"
+                     draggable="true">
+                    ${item.item}
+                </div>
+            `).join('');
+
+            setupDragAndDrop('attribute');
+        }
+
+        function setupDragAndDrop(type) {
+            const draggables = document.querySelectorAll('.draggable-item');
+            const targets = document.querySelectorAll('.sort-group');
+
+            draggables.forEach(item => {
+                item.addEventListener('dragstart', handleDragStart);
+                item.addEventListener('dragend', handleDragEnd);
+            });
+
+            targets.forEach(target => {
+                target.addEventListener('dragover', handleDragOver);
+                target.addEventListener('drop', e => handleDrop(e, type));
+            });
+        }
+
+        function handleDragStart(e) {
+            e.dataTransfer.setData('text/plain', e.target.dataset[currentAttribute]);
+            e.target.classList.add('dragging');
+        }
+
+        function handleDragEnd(e) {
+            e.target.classList.remove('dragging');
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+        }
+
+        function handleDrop(e, type) {
+            e.preventDefault();
+            const target = e.target.closest('.sort-group');
+            const draggable = document.querySelector('.dragging');
+            
+            if (!target || !draggable) return;
+
+            const isCorrect = type === 'season' 
+                ? draggable.dataset.seasons.split(',').includes(target.dataset.season)
+                : draggable.dataset[currentAttribute] === target.dataset.category;
+
+            if (isCorrect) {
+                handleCorrectDrop(draggable, target, type);
+            } else {
+                handleIncorrectDrop(draggable);
+            }
+        }
+
+        function handleCorrectDrop(draggable, target, type) {
+            const clone = draggable.cloneNode(true);
+            clone.classList.remove('dragging');
+            clone.draggable = false;
+            clone.style.cursor = 'default';
+            target.appendChild(clone);
+
+            score += 10;
+            updateScoreDisplay();
+            showFact(type === 'season' 
+                ? draggable.dataset.fact 
+                : `Correct! This belongs to ${target.dataset.category}`);
+            
+            draggable.remove();
+            checkGameCompletion();
+        }
+
+        function handleIncorrectDrop(draggable) {
+            draggable.classList.add('wrong');
+            setTimeout(() => draggable.classList.remove('wrong'), 1000);
+            showFact("Hmm, that doesn't seem right. Try again!");
+        }
+
+        function updateScoreDisplay() {
+            document.getElementById('score').textContent = score;
+        }
+
+        function showFact(text) {
+            const factDisplay = document.getElementById('factDisplay');
+            factDisplay.textContent = text;
+            factDisplay.classList.add('correct');
+            setTimeout(() => factDisplay.classList.remove('correct'), 2000);
+        }
+
+        function checkGameCompletion() {
+            if (document.querySelectorAll('.draggable-item').length === 0) {
+                setTimeout(() => {
+                    alert(`🎉 Great Job! Final Score: ${score}`);
+                    initializeGame();
+                }, 1000);
+            }
+        }
+
+        // Start the game
+        initializeGame();
+    </script>
+</body>
+</html>

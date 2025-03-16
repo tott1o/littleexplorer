@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="webpages/images/expo.png">
+    <meta name="description" content="Explore educational learning resources for children at LittleExplorers - interactive lessons and activities for young minds">
+    <title>Educational Learning Resources - LittleExplorers</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <img src="webpages/images/expo.png" alt="LittleExplorers Logo" class="logo">
+            <h1>LittleExplorers</h1>
+        </div>
+        <nav>
+            <div class="mobile-menu-btn" aria-label="Toggle menu" aria-expanded="false">
+                <i class="fas fa-bars"></i>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="#" class="active">Learn</a></li>
+                <li><a href="story-page.html">Stories</a></li>
+                <li><a href="game-page.html">Games</a></li>
+                <li><a href="testimonial.html">Testimonial</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="bg">
+        <div class="hero">
+            <div class="headin">
+                <h2>Educational Learning Resources</h2>
+                <p>Discover fun and engaging learning materials designed for curious young minds!</p>
+            </div>    
+        </div>
+   </div>
+    <main class="main-content container">
+        <section class="featured-story" aria-labelledby="featured-resource-title">
+            <div class="featured-story-image" style="background-image: url('webpages/images/learn1.jpg');" aria-label="Image from Alphabet Explorer learning resource"></div>
+            <div class="featured-story-content">
+                <h3 id="featured-resource-title">Alphabet Explorer</h3>
+                <p>Embark on an exciting journey through the ABCs with our comprehensive alphabet learning resource. Children will explore each letter through interactive activities, colorful illustrations, and fun phonics exercises.</p>
+                <p>Designed for early readers, this resource includes letter recognition activities, beginning sounds practice, and simple vocabulary building exercises.</p>
+                <div class="story-metadata">
+                    <span class="age-range">Ages 3-6</span>
+                    <span class="reading-time">20 minutes</span>
+                </div>
+                <a href="webpages/learn1.html" class="btn btn-primary">Start Learning</a>
+            </div>
+        </section>
+        
+        <section class="story-browser" aria-labelledby="browse-resources-title">
+            <h2 id="browse-resources-title">Browse Learning Resources by Subject</h2>
+            <div class="category-filter" role="group" aria-label="Learning resource subject filters">
+                <button class="category-btn active" data-category="all">All Resources</button>
+                <button class="category-btn" data-category="math">Math</button>
+                <button class="category-btn" data-category="literacy">Literacy</button>
+                <button class="category-btn" data-category="science">Science</button>
+                <button class="category-btn" data-category="arts">Arts</button>
+                <button class="category-btn" data-category="social">Social Skills</button>
+            </div>
+            
+            <div class="story-list">
+                <article class="story-card" data-categories="math">
+                    <div class="story-image" style="background-image: url('webpages/images/learn2.jpg');" aria-label="Image from Number Explorers learning resource"></div>
+                    <div class="story-content">
+                        <h3>Number Explorers</h3>
+                        <p>Discover the world of numbers with fun counting activities and basic math concepts.</p>
+                        <div class="story-metadata">
+                            <span class="age-range">Ages 3-5</span>
+                            <span class="reading-time">15 minutes</span>
+                        </div>
+                        <a href="webpages/learn2.html" class="btn">Start Learning</a>
+                    </div>
+                </article>
+                
+                <article class="story-card" data-categories="literacy">
+                    <div class="story-image" style="background-image: url('webpages/images/learn3.jpg');" aria-label="Image from Rhyme Time learning resource"></div>
+                    <div class="story-content">
+                        <h3>Rhyme Time</h3>
+                        <p>Explore rhyming words and phonemic awareness through playful activities and songs.</p>
+                        <div class="story-metadata">
+                            <span class="age-range">Ages 4-6</span>
+                            <span class="reading-time">12 minutes</span>
+                        </div>
+                        <a href="webpages/learn3.html" class="btn">Start Learning</a>
+                    </div>
+                </article>
+                
+                <article class="story-card" data-categories="science">
+                    <div class="story-image" style="background-image: url('webpages/images/learn4.jpg');" aria-label="Image from Seasons & Weather learning resource"></div>
+                    <div class="story-content">
+                        <h3>Seasons & Weather</h3>
+                        <p>Learn about the four seasons, weather patterns, and how they affect our everyday lives.</p>
+                        <div class="story-metadata">
+                            <span class="age-range">Ages 4-7</span>
+                            <span class="reading-time">15 minutes</span>
+                        </div>
+                        <a href="webpages/learn4.html" class="btn">Start Learning</a>
+                    </div>
+                </article>
+                
+                <article class="story-card" data-categories="arts">
+                    <div class="story-image" style="background-image: url('webpages/images/learn5.jpg');" aria-label="Image from Colors & Shapes learning resource"></div>
+                    <div class="story-content">
+                        <h3>Colors & Shapes</h3>
+                        <p>Explore the vibrant world of colors and geometric shapes through creative activities.</p>
+                        <div class="story-metadata">
+                            <span class="age-range">Ages 2-5</span>
+                            <span class="reading-time">10 minutes</span>
+                        </div>
+                        <a href="webpages/learn5.html" class="btn">Start Learning</a>
+                    </div>
+                </article>
+                
+                <article class="story-card" data-categories="social">
+                    <div class="story-image" style="background-image: url('webpages/images/learn6.jpg');" aria-label="Image from Emotions & Feelings learning resource"></div>
+                    <div class="story-content">
+                        <h3>Emotions & Feelings</h3>
+                        <p>Help children identify and understand different emotions through stories and activities.</p>
+                        <div class="story-metadata">
+                            <span class="age-range">Ages 3-7</span>
+                            <span class="reading-time">12 minutes</span>
+                        </div>
+                        <a href="webpages/learn6.html" class="btn">Start Learning</a>
+                    </div>
+                </article>
+                
+                <article class="story-card" data-categories="math,science">
+                    <div class="story-image" style="background-image: url('webpages/images/learn7.jpg');" aria-label="Image from Patterns & Sorting learning resource"></div>
+                    <div class="story-content">
+                        <h3>Patterns & Sorting</h3>
+                        <p>Discover patterns in nature and practice sorting objects by various attributes.</p>
+                        <div class="story-metadata">
+                            <span class="age-range">Ages 3-6</span>
+                            <span class="reading-time">10 minutes</span>
+                        </div>
+                        <a href="webpages/learn7.html" class="btn">Start Learning</a>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section class="game-benefits">
+            <h2>Benefits of Our Learning Resources</h2>
+            <div class="benefits-container">
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h3>Curriculum-Aligned</h3>
+                    <p>Our resources are designed to complement early childhood educational standards and milestones.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <i class="fas fa-child"></i>
+                    </div>
+                    <h3>Child-Centered</h3>
+                    <p>Activities that cater to different learning styles and allow children to learn at their own pace.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <i class="fas fa-puzzle-piece"></i>
+                    </div>
+                    <h3>Holistic Development</h3>
+                    <p>Resources that nurture cognitive, social, emotional, and physical development in young children.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <div class="newsletter">
+        <div class="newsletter-content">
+            <h2>Subscribe to Our Newsletter</h2>
+            <p>Stay updated with new learning resources, stories, and activities for your little ones!</p>
+            <form class="newsletter-form" id="newsletter-form">
+                <div class="form-group">
+                    <input type="email" id="email" placeholder="Enter your email" required>
+                    <button type="submit" class="subscribe-btn">Subscribe <i class="fas fa-paper-plane"></i></button>
+                </div>
+                <div class="form-message"></div>
+            </form>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">
+                <img src="webpages/images/expo.png" alt="LittleExplorers Logo" class="footer-logo-img">
+                <h3>LittleExplorers</h3>
+            </div>
+            <div class="footer-links">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="#">Learn</a></li>
+                    <li><a href="story-page.html">Stories</a></li>
+                    <li><a href="game-page.html">Games</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                </ul>
+            </div>
+            <div class="footer-contact">
+                <h4>Contact Us</h4>
+                <p><i class="fas fa-envelope"></i>akhilnath521@gmail.com</p>
+                <p><i class="fas fa-phone"></i>----------</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Learning Adventures. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        document.querySelector('.mobile-menu-btn').addEventListener('click', function() {
+            this.classList.toggle('active');
+            document.querySelector('.nav-links').classList.toggle('active');
+            this.setAttribute('aria-expanded', 
+                this.getAttribute('aria-expanded') === 'false' ? 'true' : 'false'
+            );
+        });
+
+        // Category filter functionality
+        document.querySelectorAll('.category-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                // Remove active class from all buttons
+                document.querySelectorAll('.category-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                
+                // Add active class to clicked button
+                this.classList.add('active');
+                
+                const category = this.getAttribute('data-category');
+                const resourceCards = document.querySelectorAll('.story-card');
+                
+                resourceCards.forEach(card => {
+                    if (category === 'all' || card.getAttribute('data-categories').includes(category)) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

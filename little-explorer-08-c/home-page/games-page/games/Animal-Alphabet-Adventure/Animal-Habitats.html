@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animal Habitats</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive;
+            background: #e0f7fa;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .game-container {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #2a5a3e;
+            text-align: center;
+            margin: 0 0 20px;
+        }
+
+        .habitats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .habitat {
+            background: #fff;
+            border-radius: 15px;
+            padding: 20px;
+            min-height: 150px;
+            border: 3px dashed #ccc;
+            transition: all 0.3s;
+            text-align: center;
+            position: relative;
+        }
+
+        .habitat.correct {
+            border-color: #4CAF50;
+            background: #e8f5e9;
+        }
+
+        .habitat-title {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: #2a5a3e;
+        }
+
+        .animal-bank {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .animal-card {
+            width: 100px;
+            height: 100px;
+            background: #ffd700;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.2s;
+            padding: 10px;
+            user-select: none;
+        }
+
+        .animal-card.dragging {
+            opacity: 0.7;
+            transform: scale(1.1);
+        }
+
+        .animal-emoji {
+            font-size: 40px;
+            margin-bottom: 5px;
+        }
+
+        .animal-name {
+            font-size: 12px;
+            text-align: center;
+        }
+
+        .score-board {
+            font-size: 24px;
+            color: #2a5a3e;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .fact-display {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            min-height: 80px;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .wrong {
+            animation: shake 0.4s;
+            border-color: #ff4444 !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>Animal Habitats</h1>
+        <div class="score-board">Score: <span id="score">0</span></div>
+        <div class="habitats-container" id="habitats">
+            <div class="habitat" data-habitat="arctic">
+                <div class="habitat-title">❄️ Arctic</div>
+            </div>
+            <div class="habitat" data-habitat="desert">
+                <div class="habitat-title">🏜️ Desert</div>
+            </div>
+            <div class="habitat" data-habitat="ocean">
+                <div class="habitat-title">🌊 Ocean</div>
+            </div>
+            <div class="habitat" data-habitat="jungle">
+                <div class="habitat-title">🌴 Jungle</div>
+            </div>
+        </div>
+        <div class="fact-display" id="fact"></div>
+        <div class="animal-bank" id="animalBank"></div>
+    </div>
+
+    <script>
+        const animals = [
+            { 
+                name: "Polar Bear", 
+                emoji: "🐻‍❄️", 
+                habitats: ["arctic"], 
+                fact: "Polar bears have black skin under their white fur to absorb heat!" 
+            },
+            { 
+                name: "Camel", 
+                emoji: "🐪", 
+                habitats: ["desert"], 
+                fact: "Camels can drink 30 gallons of water in 10 minutes!" 
+            },
+            { 
+                name: "Octopus", 
+                emoji: "🐙", 
+                habitats: ["ocean"], 
+                fact: "Octopuses have three hearts and blue blood!" 
+            },
+            { 
+                name: "Toucan", 
+                emoji: "🐦", 
+                habitats: ["jungle"], 
+                fact: "Toucans use their large bills to stay cool!" 
+            },
+            { 
+                name: "Penguin", 
+                emoji: "🐧", 
+                habitats: ["arctic"], 
+                fact: "Penguins have a special gland to filter saltwater!" 
+            },
+            { 
+                name: "Scorpion", 
+                emoji: "🦂", 
+                habitats: ["desert"], 
+                fact: "Scorpions glow under UV light!" 
+            },
+            { 
+                name: "Dolphin", 
+                emoji: "🐬", 
+                habitats: ["ocean"], 
+                fact: "Dolphins have names for each other!" 
+            },
+            { 
+                name: "Monkey", 
+                emoji: "🐒", 
+                habitats: ["jungle"], 
+                fact: "Monkeys can understand written numbers!" 
+            }
+        ];
+
+        let score = 0;
+        let draggedAnimal = null;
+        const scoreElement = document.getElementById('score');
+        const factElement = document.getElementById('fact');
+        const habitatsContainer = document.getElementById('habitats');
+        const animalBank = document.getElementById('animalBank');
+
+        function initializeGame() {
+            // Shuffle animals
+            const shuffledAnimals = [...animals].sort(() => Math.random() - 0.5);
+            
+            // Create animal cards
+            animalBank.innerHTML = shuffledAnimals.map(animal => `
+                <div class="animal-card" 
+                     data-animal="${animal.name}"
+                     data-habitats="${animal.habitats.join(',')}"
+                     draggable="true">
+                    <div class="animal-emoji">${animal.emoji}</div>
+                    <div class="animal-name">${animal.name}</div>
+                </div>
+            `).join('');
+
+            setupDragAndDrop();
+        }
+
+        function setupDragAndDrop() {
+            const animals = document.querySelectorAll('.animal-card');
+            const habitats = document.querySelectorAll('.habitat');
+
+            animals.forEach(animal => {
+                animal.addEventListener('dragstart', handleDragStart);
+                animal.addEventListener('dragend', handleDragEnd);
+            });
+
+            habitats.forEach(habitat => {
+                habitat.addEventListener('dragover', handleDragOver);
+                habitat.addEventListener('drop', handleDrop);
+            });
+        }
+
+        function handleDragStart(e) {
+            draggedAnimal = e.target;
+            e.target.classList.add('dragging');
+            e.dataTransfer.effectAllowed = "move";
+            e.dataTransfer.setData("text/plain", "");
+        }
+
+        function handleDragEnd(e) {
+            e.target.classList.remove('dragging');
+            draggedAnimal = null;
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = "move";
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            const habitat = e.target.closest('.habitat');
+            if (!habitat || !draggedAnimal) return;
+
+            const animalHabitats = draggedAnimal.dataset.habitats.split(',');
+            const isValid = animalHabitats.includes(habitat.dataset.habitat);
+
+            if (isValid) {
+                const clone = draggedAnimal.cloneNode(true);
+                clone.draggable = false;
+                clone.style.cursor = 'default';
+                clone.style.backgroundColor = '#a5d6a7';
+                habitat.appendChild(clone);
+                habitat.classList.add('correct');
+                
+                // Update score and show fact
+                score += 10;
+                scoreElement.textContent = score;
+                const animal = animals.find(a => a.name === draggedAnimal.dataset.animal);
+                factElement.innerHTML = `<strong>${animal.name}:</strong> ${animal.fact}`;
+                
+                // Remove from animal bank
+                draggedAnimal.remove();
+            } else {
+                habitat.classList.add('wrong');
+                setTimeout(() => habitat.classList.remove('wrong'), 500);
+            }
+        }
+
+        // Initialize game
+        initializeGame();
+    </script>
+</body>
+</html>

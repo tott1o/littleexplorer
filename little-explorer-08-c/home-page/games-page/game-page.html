@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="images/expo.png">
+    <meta name="description" content="Explore fun educational games for children at LittleExplorers - interactive learning activities for young minds">
+    <title>Fun Educational Games - LittleExplorers</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <img src="images/expo.png" alt="LittleExplorers Logo" class="logo">
+            <h1>LittleExplorers</h1>
+        </div>
+        <nav>
+            <div class="mobile-menu-btn" aria-label="Toggle menu" aria-expanded="false">
+                <i class="fas fa-bars"></i>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="learn.html">Learn</a></li>
+                <li><a href="story-page.html">Stories</a></li>
+                <li><a href="#" class="active">Games</a></li>
+                <li><a href="testimonial.html">Testimonial</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="bg">
+        <div class="hero">
+            <div class="headin">
+                <h2>Fun Educational Games</h2>
+                <p>Explore interactive games that make learning enjoyable and exciting!</p>
+            </div>    
+        </div>
+   </div>
+    <main class="main-content container">
+        <section class="featured-story" aria-labelledby="featured-game-title">
+            <div class="featured-story-image" style="background-image: url('images/game1.jpg');" aria-label="Screenshot from Animal Alphabet Adventure game"></div>
+            <div class="featured-story-content">
+                <h3 id="featured-game-title">Animal Alphabet Adventure</h3>
+                <p>Join Zoe the Zebra and her animal friends as they explore the alphabet jungle! In this engaging game, children match animals with their beginning letters while learning fun facts about each creature.</p>
+                <p>Perfect for ages 3-6, this game includes colorful animations, cheerful sound effects, and three difficulty levels to grow with your child.</p>
+                <div class="story-metadata">
+                    <span class="age-range">Ages 3-6</span>
+                    <span class="reading-time">15 minutes</span>
+                </div>
+                <a href="games\Animal-Alphabet-Adventure\game.html" class="btn btn-primary">Play this game</a>
+            </div>
+        </section>
+        
+        <section class="story-browser" aria-labelledby="browse-games-title">
+            <h2 id="browse-games-title">Browse Games by Category</h2>
+            <div class="category-filter" role="group" aria-label="Game category filters">
+                <button class="category-btn active" data-category="all">All Games</button>
+                <button class="category-btn" data-category="math">Math</button>
+                <button class="category-btn" data-category="language">Language</button>
+                <button class="category-btn" data-category="science">Science</button>
+                <button class="category-btn" data-category="creativity">Creativity</button>
+                <button class="category-btn" data-category="memory">Memory</button>
+            </div>
+            
+            <div class="story-list">
+                <article class="story-card" data-categories="math,memory">
+                    <div class="story-image" style="background-image: url('images/game2.jpg');" aria-label="Screenshot from Counting Stars game"></div>
+                    <div class="story-content">
+                        <h3>Counting Stars</h3>
+                        <p>Help the astronaut count stars and planets in this fun number recognition game!</p>
+                        <div class="story-metadata">
+                            <span class="age-range">Ages 3-5</span>
+                            <span class="reading-time">10 minutes</span>
+                        </div>
+                        <a href="games\Animal-Alphabet-Adventure\Counting-Stars.html" class="btn">Play Game</a>
+                    </div>
+                </article>
+                
+                <article class="story-card" data-categories="language">
+                    <div class="story-image" style="background-image: url('images/game3.jpg');" aria-label="Screenshot from Word Builder game"></div>
+                    <div class="story-content">
+                        <h3>Word Builder</h3>
+                        <p>Create simple words by dragging and dropping letters in this early reading game.</p>
+                        <div class="story-metadata">
+                            <span class="age-range">Ages 4-7</span>
+                            <span class="reading-time">12 minutes</span>
+                        </div>
+                        <a href="games\Animal-Alphabet-Adventure\Word-Builder.html" class="btn">Play Game</a>
+                    </div>
+                </article>
+                
+                <article class="story-card" data-categories="science">
+                    <div class="story-image" style="background-image: url('images/game4.jpg');" aria-label="Screenshot from Animal Habitats game"></div>
+                    <div class="story-content">
+                        <h3>Animal Habitats</h3>
+                        <p>Help animals find their perfect homes while learning about different environments.</p>
+                        <div class="story-metadata">
+                            <span class="age-range">Ages 4-8</span>
+                            <span class="reading-time">15 minutes</span>
+                        </div>
+                        <a href="games\Animal-Alphabet-Adventure\Animal-Habitats.html" class="btn">Play Game</a>
+                    </div>
+                </article>
+                
+                <article class="story-card" data-categories="creativity">
+                    <div class="story-image" style="background-image: url('images/game5.JPG');" aria-label="Screenshot from Musical Painting game"></div>
+                    <div class="story-content">
+                        <h3>Musical Painting</h3>
+                        <p>Create colorful artwork that plays music based on the colors and shapes you choose!</p>
+                        <div class="story-metadata">
+                            <span class="age-range">Ages 2-6</span>
+                            <span class="reading-time">No time limit</span>
+                        </div>
+                        <a href="games\Animal-Alphabet-Adventure\Musical-Painting.html" class="btn">Play Game</a>
+                    </div>
+                </article>
+                
+                <article class="story-card" data-categories="memory">
+                    <div class="story-image" style="background-image: url('images/game6.jpg');" aria-label="Screenshot from Memory Match game"></div>
+                    <div class="story-content">
+                        <h3>Memory Match</h3>
+                        <p>Find matching pairs of colorful fruits and vegetables in this memory game.</p>
+                        <div class="story-metadata">
+                            <span class="age-range">Ages 3-7</span>
+                            <span class="reading-time">8 minutes</span>
+                        </div>
+                        <a href="games\Animal-Alphabet-Adventure\Memory-Match.html" class="btn">Play Game</a>
+                    </div>
+                </article>
+                
+                <article class="story-card" data-categories="math,science">
+                    <div class="story-image" style="background-image: url('images/game7.jpg');" aria-label="Screenshot from Shape Explorer game"></div>
+                    <div class="story-content">
+                        <h3>Shape Explorer</h3>
+                        <p>Identify and sort shapes while learning about their properties in everyday objects.</p>
+                        <div class="story-metadata">
+                            <span class="age-range">Ages 3-6</span>
+                            <span class="reading-time">10 minutes</span>
+                        </div>
+                        <a href="games\Animal-Alphabet-Adventure\Shape-Explorer.html" class="btn">Play Game</a>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section class="game-benefits">
+            <h2>Benefits of Educational Games</h2>
+            <div class="benefits-container">
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3>Critical Thinking</h3>
+                    <p>Our games encourage problem-solving and logical thinking through fun challenges.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <i class="fas fa-smile-beam"></i>
+                    </div>
+                    <h3>Engagement</h3>
+                    <p>Interactive games make learning enjoyable, helping children stay focused longer.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Skill Development</h3>
+                    <p>Games build essential skills like hand-eye coordination and pattern recognition.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <div class="newsletter">
+        <div class="newsletter-content">
+            <h2>Subscribe to Our Newsletter</h2>
+            <p>Stay updated with new games, stories, and activities for your little ones!</p>
+            <form class="newsletter-form" id="newsletter-form">
+                <div class="form-group">
+                    <input type="email" id="email" placeholder="Enter your email" required>
+                    <button type="submit" class="subscribe-btn">Subscribe <i class="fas fa-paper-plane"></i></button>
+                </div>
+                <div class="form-message"></div>
+            </form>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">
+                <img src="images/expo.png" alt="LittleExplorers Logo" class="footer-logo-img">
+                <h3>LittleExplorers</h3>
+            </div>
+            <div class="footer-links">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="learn.html">Learn</a></li>
+                    <li><a href="story-page.html">Stories</a></li>
+                    <li><a href="#">Games</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                </ul>
+            </div>
+            <div class="footer-contact">
+                <h4>Contact Us</h4>
+                <p><i class="fas fa-envelope"></i>akhilnath521@gmail.com</p>
+                <p><i class="fas fa-phone"></i>----------</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Learning Adventures. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        document.querySelector('.mobile-menu-btn').addEventListener('click', function() {
+            this.classList.toggle('active');
+            document.querySelector('.nav-links').classList.toggle('active');
+            this.setAttribute('aria-expanded', 
+                this.getAttribute('aria-expanded') === 'false' ? 'true' : 'false'
+            );
+        });
+
+        // Category filter functionality
+        document.querySelectorAll('.category-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                // Remove active class from all buttons
+                document.querySelectorAll('.category-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                
+                // Add active class to clicked button
+                this.classList.add('active');
+                
+                const category = this.getAttribute('data-category');
+                const gameCards = document.querySelectorAll('.story-card');
+                
+                gameCards.forEach(card => {
+                    if (category === 'all' || card.getAttribute('data-categories').includes(category)) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

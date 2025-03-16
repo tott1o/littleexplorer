@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Counting Stars</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive;
+            background: #0a043c;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            color: white;
+        }
+
+        .game-container {
+            background: #1a1a40;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 0 30px rgba(255,255,255,0.1);
+            max-width: 600px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #fbd46d;
+            text-align: center;
+            margin: 0 0 20px;
+        }
+
+        .difficulty-selector {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        select {
+            font-size: 18px;
+            padding: 5px;
+            border-radius: 10px;
+            background: #fbd46d;
+        }
+
+        .score {
+            font-size: 24px;
+            color: #fbd46d;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .astronaut {
+            font-size: 80px;
+            text-align: center;
+            margin: 20px 0;
+            animation: float 3s infinite;
+        }
+
+        .celestial-display {
+            font-size: 40px;
+            text-align: center;
+            margin: 20px 0;
+            min-height: 60px;
+        }
+
+        .numbers-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .number-btn {
+            font-size: 30px;
+            padding: 20px;
+            border: none;
+            border-radius: 15px;
+            background: #fbd46d;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .number-btn:hover {
+            transform: scale(1.1);
+            background: #ffdf40;
+        }
+
+        .number-btn.correct {
+            animation: correct 1s;
+        }
+
+        .number-btn.wrong {
+            animation: wrong 1s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes correct {
+            0% { background: #a5d6a7; }
+            100% { background: #fbd46d; }
+        }
+
+        @keyframes wrong {
+            0% { background: #ef9a9a; }
+            100% { background: #fbd46d; }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>Counting Stars</h1>
+        <div class="difficulty-selector">
+            <select id="difficulty">
+                <option value="easy">Easy (1-5)</option>
+                <option value="medium">Medium (1-10)</option>
+                <option value="hard">Hard (1-15)</option>
+            </select>
+        </div>
+        <div class="score">Score: <span id="score">0</span></div>
+        <div class="astronaut">🧑🚀</div>
+        <div class="celestial-display" id="celestial"></div>
+        <div class="numbers-container" id="numbers"></div>
+    </div>
+
+    <script>
+        const celestialBodies = ['⭐', '🌟', '🪐', '🌠', '☄️'];
+        let currentNumber = 0;
+        let score = 0;
+        const scoreElement = document.getElementById('score');
+        const celestialElement = document.getElementById('celestial');
+        const numbersElement = document.getElementById('numbers');
+        const difficultySelect = document.getElementById('difficulty');
+
+        function getRandomNumber(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        function getRandomNumbers(correctNumber, count) {
+            const numbers = new Set();
+            let maxNumber;
+            
+            switch(difficultySelect.value) {
+                case 'easy': maxNumber = 5; break;
+                case 'medium': maxNumber = 10; break;
+                case 'hard': maxNumber = 15; break;
+            }
+
+            while (numbers.size < count - 1) {
+                const randomNumber = getRandomNumber(1, maxNumber);
+                if (randomNumber !== correctNumber) numbers.add(randomNumber);
+            }
+            
+            const numbersArray = Array.from(numbers);
+            numbersArray.push(correctNumber);
+            return numbersArray.sort(() => Math.random() - 0.5);
+        }
+
+        function createCelestialDisplay(number) {
+            let display = '';
+            const bodyType = celestialBodies[Math.floor(Math.random() * celestialBodies.length)];
+            
+            for (let i = 0; i < number; i++) {
+                display += bodyType + ' ';
+            }
+            return display.trim();
+        }
+
+        function newQuestion() {
+            let maxNumber;
+            let choicesCount;
+            
+            switch(difficultySelect.value) {
+                case 'easy':
+                    maxNumber = 5;
+                    choicesCount = 3;
+                    break;
+                case 'medium':
+                    maxNumber = 10;
+                    choicesCount = 4;
+                    break;
+                case 'hard':
+                    maxNumber = 15;
+                    choicesCount = 5;
+                    break;
+            }
+
+            currentNumber = getRandomNumber(1, maxNumber);
+            celestialElement.textContent = createCelestialDisplay(currentNumber);
+            
+            const numbers = getRandomNumbers(currentNumber, choicesCount);
+            
+            numbersElement.innerHTML = numbers.map(number => `
+                <button class="number-btn" data-number="${number}">${number}</button>
+            `).join('');
+
+            document.querySelectorAll('.number-btn').forEach(btn => {
+                btn.addEventListener('click', handleGuess);
+            });
+        }
+
+        function handleGuess(e) {
+            const guessedNumber = parseInt(e.target.dataset.number);
+            const isCorrect = guessedNumber === currentNumber;
+
+            e.target.classList.add(isCorrect ? 'correct' : 'wrong');
+            playSound(isCorrect ? 784 : 220);
+
+            if (isCorrect) {
+                score++;
+                scoreElement.textContent = score;
+                setTimeout(newQuestion, 1500);
+            } else {
+                setTimeout(() => {
+                    e.target.classList.remove('wrong');
+                }, 1000);
+            }
+        }
+
+        function playSound(frequency) {
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                oscillator.type = 'sine';
+                oscillator.frequency.value = frequency;
+                gainNode.gain.value = 0.1;
+                oscillator.start();
+                setTimeout(() => oscillator.stop(), 200);
+            } catch (e) {
+                // Sound not supported
+            }
+        }
+
+        difficultySelect.addEventListener('change', newQuestion);
+        newQuestion();
+    </script>
+</body>
+</html>

@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rainbow Shapes Playground 🌈</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700&display=swap');
+
+        body {
+            font-family: 'Baloo 2', cursive;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(160deg, #ffecd2 0%, #fcb69f 100%);
+            min-height: 100vh;
+        }
+
+        .header {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255,255,255,0.9);
+            border-radius: 30px;
+            margin: 20px auto;
+            max-width: 800px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        .title {
+            font-size: 3.5rem;
+            color: #ff6b6b;
+            text-shadow: 2px 2px 0 #fff;
+            margin: 0;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .subtitle {
+            color: #4ecdc4;
+            font-size: 1.8rem;
+            margin: 10px 0;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 25px;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: white;
+            border-radius: 25px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+        }
+
+        .shape {
+            width: 150px;
+            height: 150px;
+            margin: 15px auto;
+            position: relative;
+        }
+
+        .color-block {
+            width: 100%;
+            height: 100px;
+            border-radius: 20px;
+            margin: 15px 0;
+            border: 4px solid white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .info-panel {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255,255,255,0.95);
+            padding: 20px;
+            border-radius: 30px;
+            width: 80%;
+            max-width: 600px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            transition: all 0.3s ease;
+        }
+
+        .bounce { animation: bounce 0.5s ease; }
+        @keyframes bounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(0.95); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes shine {
+            0% { left: -50%; }
+            100% { left: 150%; }
+        }
+
+        /* Shape Styles */
+        .circle { border-radius: 50%; background: #ff6b6b; }
+        .triangle { 
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+            background: #4ecdc4;
+        }
+        .square { border-radius: 20px; background: #ffe66d; }
+        .star {
+            background: #ffd700;
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+        }
+        .heart {
+            background: #ff1493;
+            clip-path: path('M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z');
+        }
+
+        /* Color Cards */
+        .red { background: #ff0000 !important; }
+        .blue { background: #0000ff !important; }
+        .yellow { background: #ffff00 !important; }
+        .green { background: #00ff00 !important; }
+        .orange { background: #ffa500 !important; }
+        .purple { background: #800080 !important; }
+
+        .character {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 120px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1 class="title">🌈 Magic Shapes & Colors! ✨</h1>
+        <p class="subtitle">Tap anything to learn fun facts!</p>
+    </div>
+
+    <div class="grid">
+        <!-- Shapes -->
+        <div class="card" onclick="showInfo('circle')">
+            <div class="shape circle"></div>
+            <h3>Round Circle ⭕</h3>
+            <p>No corners, perfect for rolling!</p>
+        </div>
+
+        <div class="card" onclick="showInfo('triangle')">
+            <div class="shape triangle"></div>
+            <h3>Pointy Triangle 🔺</h3>
+            <p>3 sides that make perfect slices!</p>
+        </div>
+
+        <div class="card" onclick="showInfo('square')">
+            <div class="shape square"></div>
+            <h3>Happy Square ⬛</h3>
+            <p>4 equal sides, strong and steady!</p>
+        </div>
+
+        <div class="card" onclick="showInfo('star')">
+            <div class="shape star"></div>
+            <h3>Twinkling Star ⭐</h3>
+            <p>5 points to wish upon!</p>
+        </div>
+
+        <div class="card" onclick="showInfo('heart')">
+            <div class="shape heart"></div>
+            <h3>Loving Heart ❤️</h3>
+            <p>Full of love and kindness!</p>
+        </div>
+
+        <!-- Colors -->
+        <div class="card" onclick="showInfo('red')">
+            <div class="color-block red"></div>
+            <h3>Fiery Red 🔥</h3>
+            <p>Hot like fire trucks and apples!</p>
+        </div>
+
+        <div class="card" onclick="showInfo('blue')">
+            <div class="color-block blue"></div>
+            <h3>Ocean Blue 🌊</h3>
+            <p>Cool like the sea and sky!</p>
+        </div>
+
+        <div class="card" onclick="showInfo('yellow')">
+            <div class="color-block yellow"></div>
+            <h3>Sunny Yellow ☀️</h3>
+            <p>Bright like sunshine and bananas!</p>
+        </div>
+
+        <div class="card" onclick="showInfo('green')">
+            <div class="color-block green"></div>
+            <h3>Grassy Green 🌿</h3>
+            <p>Fresh like leaves and frogs!</p>
+        </div>
+
+        <div class="card" onclick="showInfo('orange')">
+            <div class="color-block orange"></div>
+            <h3>Juicy Orange 🍊</h3>
+            <p>Sweet like oranges and sunsets!</p>
+        </div>
+    </div>
+
+    <div class="info-panel" id="infoPanel">
+        <h2 id="infoTitle">Tap any shape or color to learn!</h2>
+        <p id="infoContent" style="font-size: 1.2rem"></p>
+    </div>
+
+    <script>
+        const infoData = {
+            circle: {
+                title: "Round Circle Fun!",
+                content: "🔵 Circles are everywhere! Look for them in: 🚗 Car wheels 🍕 Pizza 🎈 Balloons"
+            },
+            triangle: {
+                title: "Triangular Facts!",
+                content: "🔺 Triangles make strong shapes! Used in: 🚸 Road signs 🏔 Mountains ⛺ Tents"
+            },
+            square: {
+                title: "Square Smiles!",
+                content: "🟨 Squares are perfect for: 🪟 Windows 🧩 Puzzle pieces 📦 Boxes"
+            },
+            star: {
+                title: "Star Light, Star Bright!",
+                content: "⭐ Stars twinkle in: 🌌 Space 🌟 Flags 🎄 Christmas decorations"
+            },
+            heart: {
+                title: "Hearts Full of Love!",
+                content: "❤️ Find hearts in: 💌 Valentines 💍 Jewelry 🧠 Your body!"
+            },
+            red: {
+                title: "Red Hot Fun!",
+                content: "🔴 Red means: 🚒 Emergency 🍎 Healthy food ❤️ Love"
+            },
+            blue: {
+                title: "Cool Blue Facts!",
+                content: "🔵 Blue is found in: 🌊 Ocean 💧 Water 🦋 Butterfly wings"
+            },
+            yellow: {
+                title: "Sunny Yellow!",
+                content: "🟡 Yellow reminds us of: 🌞 Sunshine 🐥 Chicks 🍋 Lemons"
+            },
+            green: {
+                title: "Green & Growing!",
+                content: "🟢 Green means: 🌳 Nature 🥦 Vegetables 🐸 Frogs"
+            },
+            orange: {
+                title: "Orange You Excited?",
+                content: "🟠 Orange is both: � Sunset colors 🐯 Tigers 🥕 Carrots"
+            }
+        };
+
+        function showInfo(type) {
+            const panel = document.getElementById('infoPanel');
+            panel.classList.add('bounce');
+            setTimeout(() => panel.classList.remove('bounce'), 500);
+
+            document.getElementById('infoTitle').textContent = infoData[type].title;
+            document.getElementById('infoContent').innerHTML = infoData[type].content;
+        }
+    </script>
+</body>
+</html>

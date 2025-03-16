@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word Builder</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive;
+            background: #f0f7ff;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .game-container {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            max-width: 800px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #2a5a3e;
+            text-align: center;
+            margin: 0 0 20px;
+        }
+
+        .difficulty-selector {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .score {
+            font-size: 24px;
+            color: #2a5a3e;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .word-display {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 30px 0;
+            min-height: 80px;
+        }
+
+        .letter-slot {
+            width: 60px;
+            height: 60px;
+            border: 3px dashed #88d498;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            transition: all 0.3s;
+        }
+
+        .letter-slot.filled {
+            border-color: #2a5a3e;
+            background: #e8f5e9;
+        }
+
+        .letter-bank {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .letter-tile {
+            width: 60px;
+            height: 60px;
+            background: #ffd700;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            cursor: move;
+            transition: transform 0.2s;
+            user-select: none;
+        }
+
+        .letter-tile.dragging {
+            opacity: 0.7;
+            transform: scale(1.1);
+        }
+
+        .word-image {
+            font-size: 80px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .feedback {
+            text-align: center;
+            font-size: 24px;
+            min-height: 30px;
+            margin: 15px 0;
+        }
+
+        .correct { color: #2a5a3e; }
+        .incorrect { color: #ff4444; }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>Word Builder</h1>
+        <div class="difficulty-selector">
+            <select id="difficulty">
+                <option value="3">3-Letter Words</option>
+                <option value="4">4-Letter Words</option>
+                <option value="5">5-Letter Words</option>
+            </select>
+        </div>
+        <div class="score">Score: <span id="score">0</span></div>
+        <div class="word-image" id="wordImage">🐱</div>
+        <div class="word-display" id="wordSlots"></div>
+        <div class="feedback" id="feedback"></div>
+        <div class="letter-bank" id="letterBank"></div>
+    </div>
+
+    <script>
+        const wordList = {
+            3: [
+                { word: "CAT", image: "🐱", hint: "Furry pet that meows" },
+                { word: "DOG", image: "🐶", hint: "Loyal barking animal" },
+                { word: "SUN", image: "☀️", hint: "Bright daytime star" },
+                { word: "HAT", image: "🎩", hint: "Worn on your head" }
+            ],
+            4: [
+                { word: "FISH", image: "🐠", hint: "Swims in water" },
+                { word: "CAKE", image: "🎂", hint: "Sweet birthday treat" },
+                { word: "BOOK", image: "📖", hint: "For reading stories" },
+                { word: "BALL", image: "⚽", hint: "Round and bouncy" }
+            ],
+            5: [
+                { word: "APPLE", image: "🍎", hint: "Red crunchy fruit" },
+                { word: "TIGER", image: "🐅", hint: "Striped big cat" },
+                { word: "SMILE", image: "😊", hint: "Happy expression" },
+                { word: "TRAIN", image: "🚂", hint: "Rails transportation" }
+            ]
+        };
+
+        let currentWord = null;
+        let score = 0;
+        let draggedLetter = null;
+        const scoreElement = document.getElementById('score');
+        const wordSlots = document.getElementById('wordSlots');
+        const letterBank = document.getElementById('letterBank');
+        const feedbackElement = document.getElementById('feedback');
+        const wordImage = document.getElementById('wordImage');
+
+        function newGame() {
+            const difficulty = document.getElementById('difficulty').value;
+            const words = wordList[difficulty];
+            currentWord = words[Math.floor(Math.random() * words.length)];
+            
+            // Set up word image and slots
+            wordImage.textContent = currentWord.image;
+            wordSlots.innerHTML = Array(currentWord.word.length).fill()
+                .map(() => `<div class="letter-slot"></div>`).join('');
+            
+            // Create scrambled letters
+            const scrambledLetters = currentWord.word.split('')
+                .sort(() => Math.random() - 0.5);
+            
+            letterBank.innerHTML = scrambledLetters.map(letter => `
+                <div class="letter-tile" draggable="true">${letter}</div>
+            `).join('');
+
+            setupDragAndDrop();
+        }
+
+        function setupDragAndDrop() {
+            const letters = document.querySelectorAll('.letter-tile');
+            const slots = document.querySelectorAll('.letter-slot');
+
+            letters.forEach(letter => {
+                letter.addEventListener('dragstart', handleDragStart);
+                letter.addEventListener('dragend', handleDragEnd);
+            });
+
+            slots.forEach(slot => {
+                slot.addEventListener('dragover', handleDragOver);
+                slot.addEventListener('drop', handleDrop);
+            });
+        }
+
+        function handleDragStart(e) {
+            draggedLetter = e.target;
+            e.target.classList.add('dragging');
+        }
+
+        function handleDragEnd(e) {
+            e.target.classList.remove('dragging');
+            draggedLetter = null;
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            const slot = e.target.closest('.letter-slot');
+            if (!slot || slot.children.length > 0) return;
+
+            const clone = draggedLetter.cloneNode(true);
+            clone.draggable = false;
+            clone.style.cursor = 'default';
+            slot.appendChild(clone);
+            slot.classList.add('filled');
+
+            checkWordCompletion();
+        }
+
+        function checkWordCompletion() {
+            const letters = Array.from(wordSlots.children)
+                .map(slot => slot.textContent)
+                .join('');
+
+            if (letters === currentWord.word) {
+                score += currentWord.word.length * 10;
+                scoreElement.textContent = score;
+                feedbackElement.textContent = "Great job! 🎉";
+                feedbackElement.className = "feedback correct";
+                setTimeout(newGame, 2000);
+            } else if (letters.length === currentWord.word.length) {
+                feedbackElement.textContent = "Try again! 💡";
+                feedbackElement.className = "feedback incorrect";
+                setTimeout(() => {
+                    wordSlots.innerHTML = Array(currentWord.word.length).fill()
+                        .map(() => `<div class="letter-slot"></div>`).join('');
+                    setupDragAndDrop();
+                    feedbackElement.textContent = currentWord.hint;
+                    feedbackElement.className = "feedback";
+                }, 1500);
+            }
+        }
+
+        document.getElementById('difficulty').addEventListener('change', newGame);
+        newGame();
+    </script>
+</body>
+</html>

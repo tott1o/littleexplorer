@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rhyme Time</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(to bottom, #fff3e0, #ffffff);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #ffab91, #ff7043);
+            color: white;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .activity-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .rhyme-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .rhyme-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .rhyme-item:hover {
+            transform: scale(1.05);
+            background: #fff9c4;
+        }
+
+        .rhyme-pair {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .song-player {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+
+        .highlight {
+            color: #d81b60;
+            font-weight: bold;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1em;
+        }
+
+        .feedback {
+            text-align: center;
+            font-size: 1.5em;
+            margin: 15px 0;
+            min-height: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📖 Rhyme Time 🎶</h1>
+        <p>Discover the magic of rhyming words and catchy songs!</p>
+    </div>
+
+    <div class="activity-card">
+        <h2>🔤 Rhyming Pairs Game</h2>
+        <div class="rhyme-grid" id="rhymeGrid"></div>
+        <div class="feedback" id="pairFeedback"></div>
+    </div>
+
+    <div class="activity-card">
+        <h2>🎤 Nursery Rhymes</h2>
+        <div class="song-player">
+            <h3>🎵 Twinkle Twinkle Little Star</h3>
+            <p>Twinkle, twinkle, little <span class="highlight">star</span><br>
+            How I wonder what you <span class="highlight">are</span>!</p>
+            <button onclick="playSong('twinkle')">▶️ Play</button>
+        </div>
+        
+        <div class="song-player">
+            <h3>🐱 Hey Diddle Diddle</h3>
+            <p>Hey diddle diddle, the cat and the <span class="highlight">fiddle</span><br>
+            The cow jumped over the <span class="highlight">moon</span>!</p>
+            <button onclick="playSong('diddle')">▶️ Play</button>
+        </div>
+    </div>
+
+    <div class="activity-card">
+        <h2>🎲 Rhyme Generator</h2>
+        <div style="text-align: center; margin: 20px 0;">
+            <input type="text" id="rhymeInput" placeholder="Enter a word" style="font-size: 1.2em; padding: 8px;">
+            <button onclick="generateRhymes()">Find Rhymes!</button>
+            <div id="rhymeResults" style="margin: 15px 0; font-size: 1.2em;"></div>
+        </div>
+    </div>
+
+    <script>
+        // Rhyming words dataset
+        const rhymes = {
+            cat: ['hat', 'mat', 'bat', 'rat'],
+            star: ['car', 'far', 'jar', 'bar'],
+            moon: ['spoon', 'noon', 'tune', 'balloon'],
+            dog: ['log', 'fog', 'jog', 'frog'],
+            tree: ['bee', 'sea', 'key', 'tea']
+        };
+
+        // Initialize rhyming game
+        const rhymePairs = [
+            ['cat', 'hat'], ['moon', 'spoon'], ['star', 'car'],
+            ['dog', 'log'], ['cake', 'snake'], ['boat', 'coat']
+        ].flat().sort(() => Math.random() - 0.5);
+
+        const rhymeGrid = document.getElementById('rhymeGrid');
+        rhymePairs.forEach(word => {
+            const item = document.createElement('div');
+            item.className = 'rhyme-item';
+            item.textContent = word;
+            item.onclick = () => checkRhymePair(item);
+            rhymeGrid.appendChild(item);
+        });
+
+        let selectedWord = null;
+
+        function checkRhymePair(element) {
+            if(!selectedWord) {
+                selectedWord = element;
+                element.style.background = '#c8e6c9';
+            } else {
+                const word1 = selectedWord.textContent;
+                const word2 = element.textContent;
+                const isRhyme = rhymes[word1]?.includes(word2) || rhymes[word2]?.includes(word1);
+                
+                document.getElementById('pairFeedback').innerHTML = isRhyme 
+                    ? '🎉 Perfect Match! 🌟' 
+                    : '❌ Not a rhyme - try again!';
+                
+                if(isRhyme) {
+                    selectedWord.style.background = '#a5d6a7';
+                    element.style.background = '#a5d6a7';
+                    selectedWord.onclick = null;
+                    element.onclick = null;
+                }
+                
+                selectedWord = null;
+                setTimeout(() => {
+                    document.getElementById('pairFeedback').textContent = '';
+                }, 2000);
+            }
+        }
+
+        function generateRhymes() {
+            const input = document.getElementById('rhymeInput').value.toLowerCase();
+            const results = rhymes[input] || ['No rhymes found - try another word!'];
+            document.getElementById('rhymeResults').innerHTML = 
+                `Rhymes for ${input}: ${results.join(', ')}`;
+        }
+
+        function playSong(song) {
+            // Add actual audio implementation here
+            alert(`Now playing ${song}... 🎵`);
+        }
+    </script>
+</body>
+</html>

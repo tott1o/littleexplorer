@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Musical Painting</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive;
+            background: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .toolbar {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        button {
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        button:hover {
+            transform: scale(1.1);
+        }
+
+        .shape-btn {
+            font-size: 24px;
+            background: #fff;
+            width: 60px;
+            height: 60px;
+        }
+
+        .color-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+
+        .selected {
+            border: 3px solid #000;
+            transform: scale(1.1);
+        }
+
+        #canvas {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            touch-action: none;
+        }
+
+        .controls {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Musical Painting 🎨🎵</h1>
+    <div class="toolbar">
+        <div class="shapes">
+            <button class="shape-btn selected" data-shape="circle">○</button>
+            <button class="shape-btn" data-shape="square">□</button>
+            <button class="shape-btn" data-shape="triangle">△</button>
+            <button class="shape-btn" data-shape="star">★</button>
+        </div>
+        <div class="colors">
+            <button class="color-btn selected" data-color="red" style="background: #ff4444"></button>
+            <button class="color-btn" data-color="orange" style="background: #ffa500"></button>
+            <button class="color-btn" data-color="yellow" style="background: #ffd700"></button>
+            <button class="color-btn" data-color="green" style="background: #4CAF50"></button>
+            <button class="color-btn" data-color="blue" style="background: #2196F3"></button>
+            <button class="color-btn" data-color="purple" style="background: #9c27b0"></button>
+        </div>
+    </div>
+    <canvas id="canvas" width="800" height="500"></canvas>
+    <div class="controls">
+        <button onclick="clearCanvas()" style="background: #ff4444; color: white">Clear</button>
+        <button onclick="playComposition()" style="background: #4CAF50; color: white">Play All</button>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        let audioContext;
+        let selectedShape = 'circle';
+        let selectedColor = 'red';
+        const notes = [];
+        
+        // Color to note mapping (C Major Pentatonic)
+        const colorNotes = {
+            red: 261.63,    // C4
+            orange: 293.66, // D4
+            yellow: 329.63, // E4
+            green: 392.00,  // G4
+            blue: 440.00,   // A4
+            purple: 523.25  // C5
+        };
+
+        // Shape to waveform mapping
+        const shapeWaves = {
+            circle: 'sine',
+            square: 'square',
+            triangle: 'triangle',
+            star: 'sawtooth'
+        };
+
+        // Initialize audio
+        function initAudio() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        // Play single note
+        function playNote(frequency, waveform) {
+            initAudio();
+            
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.type = waveform;
+            oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+            
+            gainNode.gain.setValueAtTime(0.5, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 1);
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.start();
+            oscillator.stop(audioContext.currentTime + 1);
+        }
+
+        // Draw shapes
+        function drawShape(x, y) {
+            ctx.fillStyle = selectedColor;
+            
+            switch(selectedShape) {
+                case 'circle':
+                    ctx.beginPath();
+                    ctx.arc(x, y, 20, 0, Math.PI * 2);
+                    ctx.fill();
+                    break;
+                case 'square':
+                    ctx.fillRect(x - 20, y - 20, 40, 40);
+                    break;
+                case 'triangle':
+                    ctx.beginPath();
+                    ctx.moveTo(x, y - 20);
+                    ctx.lineTo(x + 20, y + 20);
+                    ctx.lineTo(x - 20, y + 20);
+                    ctx.closePath();
+                    ctx.fill();
+                    break;
+                case 'star':
+                    ctx.beginPath();
+                    ctx.moveTo(x, y - 20);
+                    for(let i = 0; i < 5; i++) {
+                        ctx.rotate(Math.PI / 5);
+                        ctx.lineTo(x, y - 8);
+                        ctx.rotate(Math.PI / 5);
+                        ctx.lineTo(x, y - 20);
+                    }
+                    ctx.closePath();
+                    ctx.fill();
+                    break;
+            }
+            
+            // Store note for playback
+            notes.push({
+                x,
+                y,
+                color: selectedColor,
+                shape: selectedShape,
+                time: Date.now()
+            });
+            
+            // Play sound
+            playNote(colorNotes[selectedColor], shapeWaves[selectedShape]);
+        }
+
+        // Handle canvas interactions
+        canvas.addEventListener('click', e => {
+            const rect = canvas.getBoundingClientRect();
+            drawShape(e.clientX - rect.left, e.clientY - rect.top);
+        });
+
+        // Handle mobile touch
+        canvas.addEventListener('touchstart', e => {
+            e.preventDefault();
+            const rect = canvas.getBoundingClientRect();
+            const touch = e.touches[0];
+            drawShape(touch.clientX - rect.left, touch.clientY - rect.top);
+        });
+
+        // Clear canvas
+        function clearCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            notes.length = 0;
+        }
+
+        // Play entire composition
+        function playComposition() {
+            notes.sort((a, b) => a.time - b.time);
+            const startTime = Date.now();
+            
+            notes.forEach(note => {
+                const delay = note.time - startTime;
+                setTimeout(() => {
+                    playNote(colorNotes[note.color], shapeWaves[note.shape]);
+                }, delay);
+            });
+        }
+
+        // Toolbar selection
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('click', () => {
+                if(btn.dataset.shape) {
+                    document.querySelectorAll('.shape-btn').forEach(b => b.classList.remove('selected'));
+                    btn.classList.add('selected');
+                    selectedShape = btn.dataset.shape;
+                }
+                if(btn.dataset.color) {
+                    document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('selected'));
+                    btn.classList.add('selected');
+                    selectedColor = btn.dataset.color;
+                }
+            });
+        });
+    </script>
+</body>
+</html>

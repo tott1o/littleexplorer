@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shape Explorer</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive;
+            background: #f0f9ff;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .game-container {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #1976d2;
+            text-align: center;
+            margin: 0 0 20px;
+        }
+
+        .shape-display {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .shape-info {
+            font-size: 24px;
+            color: #1976d2;
+            margin: 10px 0;
+        }
+
+        .objects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .object-card {
+            background: #fff;
+            border: 3px solid #1976d2;
+            border-radius: 15px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .object-card:hover {
+            transform: scale(1.05);
+            background: #e3f2fd;
+        }
+
+        .object-emoji {
+            font-size: 50px;
+            margin-bottom: 10px;
+        }
+
+        .score-board {
+            font-size: 24px;
+            color: #1976d2;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .shape-properties {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+
+        .feedback {
+            text-align: center;
+            font-size: 24px;
+            min-height: 30px;
+            margin: 15px 0;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .correct { color: #4CAF50; }
+        .incorrect { color: #f44336; }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>Shape Explorer 🔵🟧</h1>
+        <div class="score-board">Score: <span id="score">0</span></div>
+        <div class="shape-display">
+            <div class="shape-emoji" id="shapeEmoji" style="font-size: 100px">🔵</div>
+            <div class="shape-info" id="shapeInfo">Circle - 0 sides</div>
+        </div>
+        <div class="shape-properties" id="shapeProperties">
+            <h3>Shape Properties</h3>
+            <p id="shapeDetails">All points are the same distance from the center</p>
+            <p id="shapeExamples">Real-world examples: Wheels, Clocks, Coins</p>
+        </div>
+        <div class="feedback" id="feedback"></div>
+        <div class="objects-grid" id="objectsGrid"></div>
+    </div>
+
+    <script>
+        const shapes = [
+            {
+                name: "Circle",
+                emoji: "🔵",
+                sides: 0,
+                properties: "All points are the same distance from the center",
+                examples: ["⏰", "🚗", "🍕", "🎯", "🎠"],
+                wrongExamples: ["📘", "🚦", "🎩"]
+            },
+            {
+                name: "Triangle",
+                emoji: "🛆",
+                sides: 3,
+                properties: "Three sides and three angles",
+                examples: ["🚸", "🎸", "🔺", "⛰️", "🎄"],
+                wrongExamples: ["📦", "⚽", "📱"]
+            },
+            {
+                name: "Square",
+                emoji: "🟧",
+                sides: 4,
+                properties: "Four equal sides and right angles",
+                examples: ["📦", "🧩", "🎁", "📺", "🪟"],
+                wrongExamples: ["🍕", "⚽", "🌲"]
+            },
+            {
+                name: "Rectangle",
+                emoji: "📏",
+                sides: 4,
+                properties: "Four sides with opposite sides equal",
+                examples: ["📱", "🚪", "📘", "🚗", "🎨"],
+                wrongExamples: ["🍕", "🎈", "🎸"]
+            }
+        ];
+
+        let currentShape = null;
+        let score = 0;
+        let objects = [];
+
+        function startNewRound() {
+            currentShape = shapes[Math.floor(Math.random() * shapes.length)];
+            updateShapeDisplay();
+            createObjectCards();
+        }
+
+        function updateShapeDisplay() {
+            document.getElementById('shapeEmoji').textContent = currentShape.emoji;
+            document.getElementById('shapeInfo').textContent = 
+                `${currentShape.name} - ${currentShape.sides} ${currentShape.sides === 1 ? 'side' : 'sides'}`;
+            document.getElementById('shapeDetails').textContent = currentShape.properties;
+            document.getElementById('shapeExamples').textContent = 
+                `Real-world examples: ${currentShape.examples.join(' ')}`;
+        }
+
+        function createObjectCards() {
+            const grid = document.getElementById('objectsGrid');
+            const allExamples = [...currentShape.examples, ...currentShape.wrongExamples];
+            objects = allExamples.sort(() => Math.random() - 0.5);
+            
+            grid.innerHTML = objects.map(obj => `
+                <div class="object-card" data-correct="${currentShape.examples.includes(obj)}">
+                    <div class="object-emoji">${obj}</div>
+                </div>
+            `).join('');
+
+            document.querySelectorAll('.object-card').forEach(card => {
+                card.addEventListener('click', handleObjectClick);
+            });
+        }
+
+        function handleObjectClick(e) {
+            const card = e.currentTarget;
+            const isCorrect = card.dataset.correct === "true";
+            
+            if(isCorrect) {
+                score += 10;
+                document.getElementById('score').textContent = score;
+                card.style.background = '#C8E6C9';
+                card.style.borderColor = '#4CAF50';
+                showFeedback('Great job! 🎉', 'correct');
+            } else {
+                card.style.background = '#FFCDD2';
+                card.style.borderColor = '#f44336';
+                showFeedback('Try again! 💡', 'incorrect');
+            }
+
+            card.removeEventListener('click', handleObjectClick);
+            setTimeout(startNewRound, 1500);
+        }
+
+        function showFeedback(text, className) {
+            const feedback = document.getElementById('feedback');
+            feedback.textContent = text;
+            feedback.className = `feedback ${className}`;
+            setTimeout(() => feedback.textContent = '', 1500);
+        }
+
+        // Start the game
+        startNewRound();
+    </script>
+</body>
+</html>

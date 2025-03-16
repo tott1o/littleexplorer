@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="images/expo.png">
+    <meta name="description" content="Explore enchanting stories for children at LittleExplorers - a magical collection of tales for young readers">
+    <title>Magical Stories - LittleExplorers</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <img src="images/expo.png" alt="LittleExplorers Logo" class="logo">
+            <h1>LittleExplorers</h1>
+        </div>
+        <nav>
+            <div class="mobile-menu-btn" aria-label="Toggle menu" aria-expanded="false">
+                <i class="fas fa-bars"></i>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#Home" class="active">Home</a></li>
+                <li><a href="#cards">Learn</a></li>
+                <li><a href="#cards">Stories</a></li>
+                <li><a href="#cards">Games</a></li>
+                <li><a href="#testimonial">Testimonial</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="bg">
+        <div class="hero">
+            <div class="headin">
+                <h2>Magical Stories</h2>
+                <p>Embark on incredible adventures with our collection of enchanting tales!</p>
+            </div>    
+        </div>
+   </div>
+    <main class="main-content container">
+        <section class="featured-story" aria-labelledby="featured-story-title">
+            <div class="featured-story-image" style="background-image: url('stories/images/andy.dogstale.png');" aria-label="Illustration from The Friendly Forest story"></div>
+            <div class="featured-story-content">
+                <h3 id="featured-story-title">Andy: A Dog's Tale </h3>
+                <p>story of how one puppy overcomes a series of obstacles to find his purpose in life as a Canine Companions service dog. Andy learns that life is not always easy, yet through the help of others and determination, he shows us that unlikely heroes often come from small beginnings and a big heart. </p>
+                <p>Perfect for ages 3-5, this story includes colorful illustrations and fun activities to engage little explorers.</p>
+                <div class="story-metadata">
+                    <span class="age-range">Ages 3-5</span>
+                    <span class="reading-time">8 minutes</span>
+                </div>
+                <a href="stories/storyhtmls/story1.html" class="btn btn-primary">Read this story</a>
+            </div>
+        </section>
+        
+        <section class="story-browser" aria-labelledby="browse-stories-title">
+            <h2 id="browse-stories-title">Browse Stories by Category</h2>
+            <div class="category-filter" role="group" aria-label="Story category filters">
+                <button class="category-btn active" data-category="all">All Stories</button>
+                <button class="category-btn" data-category="adventure">Adventure</button>
+                <button class="category-btn" data-category="nature">Nature</button>
+                <button class="category-btn" data-category="friendship">Friendship</button>
+                <button class="category-btn" data-category="numbers">Numbers & Counting</button>
+                <button class="category-btn" data-category="colors">Colors & Shapes</button>
+            </div>
+            
+            <div class="story-list">
+                <article class="story-card" data-categories="adventure,friendship">
+                    <div class="story-image" style="background-image: url('stories/images/foxandbird.png');" aria-label="Illustration from The Brave Little Boat story"></div>
+                    <div class="story-content">
+                        <h3>The Fox and the Bird </h3>
+                        <p>A solitary fox finds itself improvising fatherhood for a freshly hatched baby bird. Two paths cross and a family is formed, until fate reminds each of the life it is meant to lead.
+                        </p>
+                        <div class="story-metadata">
+                            <span class="age-range">Ages 4-7</span>
+                            <span class="reading-time">12 minutes</span>
+                        </div>
+                        <a href="stories/storyhtmls/story2.html" class="btn">Read Story</a>
+                    </div>
+                </article>
+                
+                <article class="story-card" data-categories="colors">
+                    <div class="story-image" style="background-image: url('stories/images/The-Rhythm\ of-Water.png');" aria-label="Illustration from Rainbow's Colors story"></div>
+                    <div class="story-content">
+                        <h3>The Rhythm of Water (Au rythme de l'eau) - by ESMA</h3>
+                        <p>A young music-loving beaver tries to find his place within the group through music.</p>
+                        <div class="story-metadata">
+                            <span class="age-range">Ages 2-4</span>
+                            <span class="reading-time">8 minutes</span>
+                        </div>
+                        <a href="stories/storyhtmls/story3.html" class="btn">Read Story</a>
+                    </div>
+                </article>
+                
+                <article class="story-card" data-categories="numbers">
+                    <div class="story-image" style="background-image: url('stories/images/ThreeBillyGoats.png');" aria-label="Illustration from Counting with Elephants story"></div>
+                    <div class="story-content">
+                        <h3>The Three Billy Goats Gruff </h3>
+                        <p>The Three Billy Goats Gruff can't wait to cross the bridge and eat the sweet green grass that's on the other side. But can they get past the Bad Old Toll without being eaten? </p>
+                        <div class="story-metadata">
+                            <span class="age-range">Ages 3-6</span>
+                            <span class="reading-time">12 minutes</span>
+                        </div>
+                        <a href="stories/storyhtmls/story4.html" class="btn">Read Story</a>
+                    </div>
+                </article>
+                
+                <article class="story-card" data-categories="friendship">
+                    <div class="story-image" style="background-image: url('stories/images/sore.png');" aria-label="Illustration from The Sharing Tree story"></div>
+                    <div class="story-content">
+                        <h3> "Soar" - by Alyce Tzue </h3>
+                        <p>about a young girl who must help a tiny boy pilot fly home before it"s too late, created by the talented Alyce Tzue! </p>
+                        <div class="story-metadata">
+                            <span class="age-range">Ages 4-8</span>
+                            <span class="reading-time">10 minutes</span>
+                        </div>
+                        <a href="stories/storyhtmls/story5.html" class="btn">Read Story</a>
+                    </div>
+                </article>
+                
+                <article class="story-card" data-categories="nature">
+                    <div class="story-image" style="background-image: url('stories/images/hope.png');" aria-label="Illustration from Mia's Magic Garden story"></div>
+                    <div class="story-content">
+                        <h3>HOPE (2020)</h3>
+                        <p>about the journey of a new born baby sea turtle named Aqua. During his journey, he faces many obstacles from human pollution to different predators. Using his mind and courage he over comes one obstacle after the other, until he reaches his final destination. Just before he enters the sea, he witnesses a life changing scene, that he bravely over comes and grows as a character.</p>
+                        <div class="story-metadata">
+                            <span class="age-range">Ages 3-5</span>
+                            <span class="reading-time">9 minutes</span>
+                        </div>
+                        <a href="stories/storyhtmls/story6.html" class="btn">Read Story</a>
+                    </div>
+                </article>
+                
+                <article class="story-card" data-categories="adventure">
+                    <div class="story-image" style="background-image: url('stories/images/freedom.png');" aria-label="Illustration from The Sleepy Moon story"></div>
+                    <div class="story-content">
+                        <h3>a boy dreaming of freedom</h3>
+                        <p>A young boy named Sonny works in an underground coal mine with the adults, taking care of the canary that detects deadly methane gas. He teaches the bird to play dead to prank the men, risking their lives for a moment in the sunlight above.</p>
+                        <div class="story-metadata">
+                            <span class="age-range">Ages 2-5</span>
+                            <span class="reading-time">7 minutes</span>
+                        </div>
+                        <a href="stories/storyhtmls/story7.html" class="btn">Read Story</a>
+                    </div>
+                </article>
+            </div>
+        </section>
+    </main>
+    
+    <div class="newsletter">
+        <div class="newsletter-content">
+            <h2>Subscribe to Our Newsletter</h2>
+            <p>Stay updated with new stories, games, and activities for your little ones!</p>
+            <form class="newsletter-form" id="newsletter-form">
+                <div class="form-group">
+                    <input type="email" id="email" placeholder="Enter your email" required>
+                    <button type="submit" class="subscribe-btn">Subscribe <i class="fas fa-paper-plane"></i></button>
+                </div>
+                <div class="form-message"></div>
+            </form>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">
+                <img src="images/expo.png" alt="LittleExplorers Logo" class="footer-logo-img">
+                <h3>LittleExplorers</h3>
+            </div>
+            <div class="footer-links">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#Home">Home</a></li>
+                    <li><a href="#learn">Learn</a></li>
+                    <li><a href="#stories">Stories</a></li>
+                    <li><a href="#games">Games</a></li>
+                    <li><a href="#about">About Us</a></li>
+                </ul>
+            </div>
+            <div class="footer-contact">
+                <h4>Contact Us</h4>
+                <p><i class="fas fa-envelope"></i>akhilnath521@gmail.com</p>
+                <p><i class="fas fa-phone"></i>----------</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Learning Adventures. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        document.querySelector('.mobile-menu-btn').addEventListener('click', function() {
+            this.classList.toggle('active');
+            document.querySelector('.nav-links').classList.toggle('active');
+            this.setAttribute('aria-expanded', 
+                this.getAttribute('aria-expanded') === 'false' ? 'true' : 'false'
+            );
+        });
+
+        // Category filter functionality
+        document.querySelectorAll('.category-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                // Remove active class from all buttons
+                document.querySelectorAll('.category-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                
+                // Add active class to clicked button
+                this.classList.add('active');
+                
+                const category = this.getAttribute('data-category');
+                const storyCards = document.querySelectorAll('.story-card');
+                
+                storyCards.forEach(card => {
+                    if (category === 'all' || card.getAttribute('data-categories').includes(category)) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

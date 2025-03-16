@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number Explorers</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(to bottom, #b4e0a8, #ffffff);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            padding: 20px;
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .number-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 15px;
+            padding: 20px;
+        }
+
+        .number-card {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+
+        .number-card:hover {
+            transform: scale(1.05);
+        }
+
+        .number {
+            font-size: 2.5em;
+            color: #2196F3;
+            margin: 10px 0;
+        }
+
+        .count-emojis {
+            font-size: 1.8em;
+            margin: 10px 0;
+            min-height: 50px;
+        }
+
+        .activity-section {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+
+        .counting-game {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .counting-item {
+            font-size: 2em;
+            padding: 15px;
+            border: 2px solid #4CAF50;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .math-problem {
+            text-align: center;
+            font-size: 2em;
+            margin: 20px 0;
+        }
+
+        .answer-options {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .answer-btn {
+            font-size: 1.5em;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 20px;
+            background-color: #FF9800;
+            color: white;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🔢 Number Explorers 🌟</h1>
+        <p>Discover the magic of numbers and counting!</p>
+    </div>
+
+    <div class="number-grid" id="numberGrid"></div>
+
+    <div class="activity-section">
+        <h2>🧮 Counting Practice</h2>
+        <div class="counting-game" id="countingGame">
+            <!-- Counting items will be added by JavaScript -->
+        </div>
+    </div>
+
+    <div class="activity-section">
+        <h2>➕ Basic Math</h2>
+        <div class="math-problem" id="mathProblem"></div>
+        <div class="answer-options" id="answerOptions"></div>
+    </div>
+
+    <script>
+        // Number data with emoji patterns
+        const numbers = [
+            {num: 1, emojis: '🐛', word: 'One'}, 
+            {num: 2, emojis: '🐻🐻', word: 'Two'},
+            {num: 3, emojis: '🚗🚗🚗', word: 'Three'},
+            {num: 4, emojis: '🍎🍎🍎🍎', word: 'Four'},
+            {num: 5, emojis: '⭐️⭐️⭐️<br>⭐️⭐️', word: 'Five'},
+            {num: 6, emojis: '⚽️⚽️⚽️⚽️⚽️⚽️', word: 'Six'},
+            {num: 7, emojis: '🌈🌈🌈🌈🌈🌈🌈', word: 'Seven'},
+            {num: 8, emojis: '🐙🐙🐙🐙🐙🐙🐙🐙', word: 'Eight'},
+            {num: 9, emojis: '🎈🎈🎈🎈🎈🎈🎈🎈🎈', word: 'Nine'},
+            {num: 10, emojis: '🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶', word: 'Ten'}
+        ];
+
+        // Create number cards
+        const numberGrid = document.getElementById('numberGrid');
+        numbers.forEach(number => {
+            const card = document.createElement('div');
+            card.className = 'number-card';
+            card.innerHTML = `
+                <div class="number">${number.num}</div>
+                <div class="count-emojis">${number.emojis}</div>
+                <div style="color: #666;">${number.word}</div>
+            `;
+            numberGrid.appendChild(card);
+        });
+
+        // Counting game
+        const countingGame = document.getElementById('countingGame');
+        const items = ['🐸', '🍪', '🚗', '🎈', '⭐'];
+        const createCountingGame = () => {
+            const count = Math.floor(Math.random() * 5) + 3;
+            const randomItem = items[Math.floor(Math.random() * items.length)];
+            
+            countingGame.innerHTML = `
+                <h3>Count the ${randomItem}'s:</h3>
+                ${Array(count).fill(randomItem).join('')}
+                <div style="width: 100%; text-align: center; margin-top: 15px;">
+                    ${[count-1, count, count+1].map(n => `
+                        <button class="answer-btn" onclick="checkCount(${n}, ${count})">${n}</button>
+                    `).join('')}
+                </div>
+            `;
+        };
+
+        // Math problems
+        const mathProblem = document.getElementById('mathProblem');
+        const answerOptions = document.getElementById('answerOptions');
+        const createMathProblem = () => {
+            const num1 = Math.floor(Math.random() * 5) + 1;
+            const num2 = Math.floor(Math.random() * 5) + 1;
+            const operators = ['+', '-'];
+            const operator = operators[Math.floor(Math.random() * operators.length)];
+            
+            let correctAnswer;
+            if(operator === '+') correctAnswer = num1 + num2;
+            if(operator === '-') correctAnswer = num1 - num2;
+
+            mathProblem.innerHTML = `${num1} ${operator} ${num2} = ?`;
+            
+            // Generate answer options
+            const answers = [correctAnswer];
+            while(answers.length < 3) {
+                const randomAnswer = Math.floor(Math.random() * 10) + 1;
+                if(!answers.includes(randomAnswer)) answers.push(randomAnswer);
+            }
+            answers.sort(() => Math.random() - 0.5);
+            
+            answerOptions.innerHTML = answers.map(answer => `
+                <button class="answer-btn" onclick="checkMathAnswer(${answer}, ${correctAnswer})">
+                    ${answer}
+                </button>
+            `).join('');
+        };
+
+        // Check answers
+        function checkCount(selected, correct) {
+            alert(selected === correct ? '🎉 Correct! Great counting!' : '❌ Try again!');
+            createCountingGame();
+        }
+
+        function checkMathAnswer(selected, correct) {
+            alert(selected === correct ? '🧠 Correct! Math genius!' : '❌ Oops, try another one!');
+            createMathProblem();
+        }
+
+        // Initialize games
+        createCountingGame();
+        createMathProblem();
+    </script>
+</body>
+</html>

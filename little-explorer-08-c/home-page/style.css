@@ -586,6 +586,12 @@ footer {
 }
 
 /* Responsive Design */
+@media screen and (max-width: 1024px) {
+    .card {
+        width: calc(50% - 20px);
+    }
+}
+
 @media screen and (max-width: 768px) {
     header {
         padding: 15px 4%;
@@ -596,8 +602,8 @@ footer {
     }
     
     .nav-links {
-        position: absolute;
-        top: 100%;
+        position: fixed;
+        top: 70px;
         left: 0;
         right: 0;
         background-color: var(--primary-color);
@@ -606,10 +612,12 @@ footer {
         max-height: 0;
         overflow: hidden;
         transition: max-height 0.3s ease;
+        z-index: 1000;
     }
     
     .nav-links.active {
         max-height: 300px;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
     }
     
     .nav-links li {
@@ -624,6 +632,7 @@ footer {
     
     .headin {
         padding: 2rem;
+        width: 95%;
     }
     
     .hero h2 {
@@ -637,10 +646,20 @@ footer {
     .about-section {
         flex-direction: column;
         gap: 2rem;
+        padding: 3rem 5%;
     }
     
     .about-content {
         padding-right: 0;
+        text-align: center;
+    }
+    
+    .about-image {
+        margin-top: 2rem;
+    }
+    
+    .testimonial {
+        padding: 3rem 5%;
     }
     
     .footer-content {
@@ -653,23 +672,3 @@ footer {
         gap: 1rem;
         text-align: center;
     }
-    
-    .footer-legal {
-        justify-content: center;
-    }
-}
-
-@media screen and (max-width: 480px) {
-    .hero {
-        padding: 2rem 1rem;
-    }
-    
-    .headin {
-        padding: 1.5rem;
-    }
-    
-    .newsletter input[type="email"],
-    .subscribe-btn {
-        width: 100%;
-    }
-}

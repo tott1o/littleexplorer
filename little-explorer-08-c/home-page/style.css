@@ -586,12 +586,6 @@ footer {
 }
 
 /* Responsive Design */
-@media screen and (max-width: 1024px) {
-    .card {
-        width: calc(50% - 20px);
-    }
-}
-
 @media screen and (max-width: 768px) {
     header {
         padding: 15px 4%;
@@ -602,8 +596,8 @@ footer {
     }
     
     .nav-links {
-        position: fixed;
-        top: 70px;
+        position: absolute;
+        top: 100%;
         left: 0;
         right: 0;
         background-color: var(--primary-color);
@@ -612,12 +606,10 @@ footer {
         max-height: 0;
         overflow: hidden;
         transition: max-height 0.3s ease;
-        z-index: 1000;
     }
     
     .nav-links.active {
         max-height: 300px;
-        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
     }
     
     .nav-links li {
@@ -632,7 +624,6 @@ footer {
     
     .headin {
         padding: 2rem;
-        width: 95%;
     }
     
     .hero h2 {
@@ -646,20 +637,10 @@ footer {
     .about-section {
         flex-direction: column;
         gap: 2rem;
-        padding: 3rem 5%;
     }
     
     .about-content {
         padding-right: 0;
-        text-align: center;
-    }
-    
-    .about-image {
-        margin-top: 2rem;
-    }
-    
-    .testimonial {
-        padding: 3rem 5%;
     }
     
     .footer-content {
@@ -672,57 +653,12 @@ footer {
         gap: 1rem;
         text-align: center;
     }
-
-    /* Add to your existing media queries section in style.css */
-
-/* Improved Mobile Menu */
-@media screen and (max-width: 768px) {
-    .nav-links {
-        position: fixed; /* Change from absolute to fixed */
-        top: 70px; /* Adjust based on your header height */
-        left: 0;
-        width: 100%;
-        background-color: var(--primary-color);
-        flex-direction: column;
-        gap: 0;
-        max-height: 0;
-        overflow: hidden;
-        transition: max-height 0.5s ease;
-        z-index: 1000;
-        box-shadow: 0 5px 10px rgba(0,0,0,0.1);
-    }
     
-    /* Better Card Layout */
-    .cards-container {
+    .footer-legal {
         justify-content: center;
     }
-    
-    .card {
-        width: 80%; /* Make cards wider on tablets */
-        max-width: 400px;
-    }
 }
 
-/* Add a medium breakpoint */
-@media screen and (max-width: 600px) {
-    .hero h2 {
-        font-size: 1.8rem;
-    }
-    
-    .sections {
-        padding: 3rem 3%;
-    }
-    
-    .card {
-        width: 90%; /* Even wider cards on smaller devices */
-    }
-    
-    .testimonial-slide p {
-        font-size: 1rem;
-    }
-}
-
-/* Enhance your existing small breakpoint */
 @media screen and (max-width: 480px) {
     header h1 {
         font-size: 1.5rem;
@@ -743,10 +679,9 @@ footer {
     }
     
     .about-image img {
-        max-width: 100%; /* Full width on mobile */
+        max-width: 100%; 
     }
     
-    /* Fixed newsletter form */
     .form-group {
         flex-direction: column;
     }
@@ -757,12 +692,6 @@ footer {
         margin: 0;
     }
 }
-
-/* Add a very small breakpoint */
-@media screen and (max-width: 320px) {
-    .headin {
-        padding: 1rem;
-    }
     
     .hero h2 {
         font-size: 1.5rem;
